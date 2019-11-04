@@ -4,6 +4,8 @@ find_library(ROO_FIT_CORE RooFitCore $ENV{ROOTSYS}/lib)
 find_library(ROOT_GPAD_LIB Gpad $ENV{ROOTSYS}/lib)
 find_library(ROOT_MATH_LIB MathCore $ENV{ROOTSYS}/lib)
 
+add_library(CrystalBall CrystalBall.cxx)
+
 add_library(HpsFitResult HpsFitResult.cxx
     ${ROO_FIT}
     ${ROO_FIT_CORE}
