@@ -135,12 +135,15 @@ HpsFitResult* BumpHunter::performSearch(TH1* histogram, double mass_hypothesis, 
             bkg->SetParameters(4,0,0,0,0,0);
             bkg->SetParNames("pol0","pol1","pol2","pol3","pol4","pol5");
         }
-
-        TFitResultPtr result = histogram->Fit("bkg", "LES+", "", window_start_, window_end_); 
+        
+        std::cout << "Starting fit..." << std::endl;
+        TFitResultPtr result = histogram->Fit("bkg", "LES+", "", window_start_, window_end_);
+        std::cout << "End of fit..." << std::endl;
         fit_result->setBkgFitResult(result); 
         //result->Print();
 
     }
+    std::cout << "End background fit." << std::endl;
          
     std::cout << "***************************************************" << std::endl;
     std::cout << "***************************************************" << std::endl;
@@ -180,7 +183,9 @@ HpsFitResult* BumpHunter::performSearch(TH1* histogram, double mass_hypothesis, 
     //}
 
     this->calculatePValue(fit_result);
-    this->getUpperLimit(histogram, fit_result);
+    
+    // This code doesn't work. Why? Needs to be fixed.
+    // this->getUpperLimit(histogram, fit_result);
     
     // Persist the mass hypothesis used for this fit
     fit_result->setMass(mass_hypothesis_); 
