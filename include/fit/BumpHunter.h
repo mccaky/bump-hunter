@@ -38,8 +38,6 @@
 //---//
 #include <HpsFitResult.h>
 #include <FitPrinter.h>
-#include <ExpPol3BkgFunction.h>
-#include <ExpPol5BkgFunction.h>
 #include <ExpPol3FullFunction.h>
 #include <ExpPol5FullFunction.h>
 
@@ -55,7 +53,7 @@ class BumpHunter {
         };
 
         /** Default Constructor */
-        BumpHunter(BkgModel model, int poly_order, int res_factor);
+        BumpHunter(BkgModel model, FitFunction::FitModel m_fit_model, int poly_order, int res_factor);
 
         /** Destructor */
         ~BumpHunter();
@@ -184,7 +182,10 @@ class BumpHunter {
 
         /** Polynomial order used to model the background. */
         int poly_order_{0};
-
+		
+		/** The type of function to use when modelling the signal. */
+		FitFunction::FitModel fit_model{FitFunction::FitModel::GAUSSIAN};
+		
         /** 
          * Flag denoting if application should run in batch mode.  If set to 
          * true, plots aren't generated and fit results aren't logged.

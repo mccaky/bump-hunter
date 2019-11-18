@@ -11,7 +11,7 @@
 
 #include <BumpHunter.h>
 
-BumpHunter::BumpHunter(BkgModel model, int poly_order, int res_factor) 
+BumpHunter::BumpHunter(BkgModel model, FitFunction::FitModel m_fit_model, int poly_order, int res_factor) 
     : ofs(nullptr),
       res_factor_(res_factor), 
       poly_order_(poly_order) {
@@ -117,7 +117,7 @@ HpsFitResult* BumpHunter::performSearch(TH1 *histogram, double mass_hypothesis, 
 		TF1 *bkg{nullptr};
 		if(poly_order_ == 3) {
 			//
-			ExpPol3BkgFunction bkg_func(mass_hypothesis, window_end_ - window_start_); 
+			ExpPol3FullFunction bkg_func(FitFunction::FitModel::NONE, mass_hypothesis, window_end_ - window_start_); 
 			bkg = new TF1("bkg", bkg_func, -1, 1, 4);
 			
 			//
@@ -125,7 +125,7 @@ HpsFitResult* BumpHunter::performSearch(TH1 *histogram, double mass_hypothesis, 
 			bkg->SetParNames("pol0", "pol1", "pol2", "pol3");
 		} else { 
 			//
-			ExpPol5BkgFunction bkg_func(mass_hypothesis, window_end_ - window_start_);
+			ExpPol5FullFunction bkg_func(FitFunction::FitModel::NONE, mass_hypothesis, window_end_ - window_start_);
 			bkg = new TF1("bkg", bkg_func, -1, 1, 6);
 			
 			//
@@ -150,7 +150,7 @@ HpsFitResult* BumpHunter::performSearch(TH1 *histogram, double mass_hypothesis, 
 	
 	TF1 *full{nullptr};
 	if (poly_order_ == 3) {
-		ExpPol3FullFunction full_func(mass_hypothesis, window_end_ - window_start_);
+		ExpPol3FullFunction full_func(fit_model, mass_hypothesis, window_end_ - window_start_);
 		full = new TF1("full", full_func, -1, 1, 7);
 		
 		full->SetParameters(4, 0, 0, 0, 0, 0, 0);
@@ -158,7 +158,7 @@ HpsFitResult* BumpHunter::performSearch(TH1 *histogram, double mass_hypothesis, 
 		full->FixParameter(5, 0.0);
 		full->FixParameter(6, mass_resolution_);
 	} else {
-		ExpPol5FullFunction full_func(mass_hypothesis, window_end_ - window_start_);
+		ExpPol5FullFunction full_func(fit_model, mass_hypothesis, window_end_ - window_start_);
 		full = new TF1("full", full_func, -1, 1, 9);
 		
 		full->SetParameters(4, 0, 0, 0, 0, 0, 0, 0, 0);
@@ -245,7 +245,7 @@ void BumpHunter::getUpperLimit(TH1* histogram, HpsFitResult* result) {
     TF1* comp{nullptr};
     if (poly_order_ == 3) { 
   
-        ExpPol3FullFunction comp_func(mass_hypothesis_, window_end_ - window_start_); 
+        ExpPol3FullFunction comp_func(fit_model, mass_hypothesis_, window_end_ - window_start_); 
         comp = new TF1("comp_ul", comp_func, -1, 1, 7);
     
         comp->SetParameters(4,0,0,0,0,0,0);
@@ -255,7 +255,7 @@ void BumpHunter::getUpperLimit(TH1* histogram, HpsFitResult* result) {
         
     } else { 
        
-        ExpPol5FullFunction comp_func(mass_hypothesis_, window_end_ - window_start_); 
+        ExpPol5FullFunction comp_func(fit_model, mass_hypothesis_, window_end_ - window_start_); 
         comp = new TF1("comp_ul", comp_func, -1, 1, 9);
     
         comp->SetParameters(4,0,0,0,0,0,0,0,0);
