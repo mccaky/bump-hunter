@@ -18,8 +18,6 @@ target_link_libraries(BumpHunter
     ${ROOT_MATH_LIB}
     HpsFitResult
     FitPrinter
-    ExpPol3BkgFunction
-    ExpPol5BkgFunction
     ExpPol3FullFunction
     ExpPol5FullFunction
 )
