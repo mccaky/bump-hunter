@@ -13,7 +13,7 @@ class FitFunction {
 		 * and with the specified parameters.
 		 */
 		double operator() (double *x, double *par) {
-			return calculate(x, par);
+			return calculateBackground(x, par) + calculateSignal(x, par);
 		}
 		
 	protected:
@@ -24,10 +24,16 @@ class FitFunction {
 		double window_size = 0;
 		
 		/**
-		 * Calculates the value of the function at the specified x
-		 * and with the specified parameters.
+		 * Calculates the value of the background function at the
+		 * specified x and with the specified parameters.
 		 */
-		virtual double calculate(double *x, double *par) = 0;
+		virtual double calculateBackground(double *x, double *par) = 0;
+		
+		/**
+		 * Calculates the value of the signal function at the
+		 * specified x and with the specified parameters.
+		 */
+		virtual double calculateSignal(double *x, double *par) = 0;
 		
 		/**
 		 * Gets a value of x corrected for window size and the mass
