@@ -3,7 +3,7 @@ class ExpPol5BkgFunction {
 		/** Constructor */
 		ExpPol5BkgFunction(double mass_hypothesis, double window_size);
 		
-		double operator() (double* x, double* par);
+		double operator() (double *x, double *par);
 		
 	private:
 		/** Mass hypothesis */

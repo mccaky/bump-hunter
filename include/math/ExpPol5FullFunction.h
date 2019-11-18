@@ -3,7 +3,7 @@ class ExpPol5FullFunction {
 		/** Constructor */
 		ExpPol5FullFunction(double mass_hypothesis, double window_size);
 		
-		double operator() (double* x, double* par);
+		double operator() (double *x, double *par);
 		
 	private:
 		/** Mass hypothesis */
