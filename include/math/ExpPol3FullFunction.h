@@ -4,5 +4,6 @@ class ExpPol3FullFunction: public FitFunction {
 	using FitFunction::FitFunction;
 	
 	protected:
-		double calculate(double *x, double *par);
+		double calculateBackground(double *x, double *par);
+		double calculateSignal(double *x, double *par);
 };

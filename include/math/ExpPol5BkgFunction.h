@@ -4,5 +4,8 @@ class ExpPol5BkgFunction: public FitFunction {
 	using FitFunction::FitFunction;
 	
 	protected:
-		double calculate(double *x, double *par);
+		double calculateBackground(double *x, double *par);
+		
+		// Background-only functions do not use a signal fit.
+		double calculateSignal(double *x, double *par) { return 0; }
 };
