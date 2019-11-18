@@ -3,10 +3,17 @@
 
 class FitFunction {
 	public:
+        enum FitModel {
+            NONE         = 0,
+            GAUSSIAN     = 1,
+            CRYSTAL_BALL = 2
+        };
+		
 		/** Constructor */
-		FitFunction(double m_mass_hypothesis, double m_window_size) {
+		FitFunction(FitModel model, double m_mass_hypothesis, double m_window_size) {
 			window_size = m_window_size;
 			mass_hypothesis = m_mass_hypothesis;
+			fit_model = model;
 		}
 		
 		/** Calculates the value of the function at the specified x
@@ -22,6 +29,9 @@ class FitFunction {
 		
 		/** Size of the search window. */
 		double window_size = 0;
+		
+		/** Fit function to be used. */
+		FitModel fit_model;
 		
 		/**
 		 * Calculates the value of the background function at the
