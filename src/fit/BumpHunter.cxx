@@ -95,111 +95,104 @@ void BumpHunter::initialize(TH1* histogram, double &mass_hypothesis) {
     this->printDebug("Window integral: " + std::to_string(integral_)); 
 }
 
-HpsFitResult* BumpHunter::performSearch(TH1* histogram, double mass_hypothesis, bool skip_bkg_fit = false) { 
-   
-    // Calculate all of the fit parameters e.g. window size, mass hypothesis
-    this->initialize(histogram, mass_hypothesis);
-
-    // Instantiate a new fit result object to store all of the results.
-    HpsFitResult* fit_result = new HpsFitResult(); 
-    fit_result->setPolyOrder(poly_order_); 
-
-    // If not fitting toys, start by performing a background only fit.
-    if (!skip_bkg_fit)  {
-         
-        // Start by performing a background only fit.  The results from this fit 
-        // are used to get an intial estimate of the background parameters.  
-        std::cout << "*************************************************" << std::endl;
-        std::cout << "*************************************************" << std::endl;
-        std::cout << "[ BumpHunter ]: Performing a background only fit." << std::endl;
-        std::cout << "*************************************************" << std::endl;
-        std::cout << "*************************************************" << std::endl;
-   
-        //
-        TF1* bkg{nullptr}; 
-        if (poly_order_ == 3) { 
-            
-            //
-            ExpPol3BkgFunction bkg_func(mass_hypothesis, window_end_ - window_start_); 
-            bkg = new TF1("bkg", bkg_func, -1, 1, 4);
-
-            //
-            bkg->SetParameters(4,0,0,0);
-            bkg->SetParNames("pol0","pol1","pol2","pol3");
-        } else { 
-            //
-            ExpPol5BkgFunction bkg_func(mass_hypothesis, window_end_ - window_start_); 
-            bkg = new TF1("bkg", bkg_func, -1, 1, 6);
-
-            //
-            bkg->SetParameters(4,0,0,0,0,0);
-            bkg->SetParNames("pol0","pol1","pol2","pol3","pol4","pol5");
-        }
-        
-        std::cout << "Starting fit..." << std::endl;
-        TFitResultPtr result = histogram->Fit("bkg", "LES+", "", window_start_, window_end_);
-        std::cout << "End of fit..." << std::endl;
-        fit_result->setBkgFitResult(result); 
-        //result->Print();
-
-    }
-    std::cout << "End background fit." << std::endl;
-         
-    std::cout << "***************************************************" << std::endl;
-    std::cout << "***************************************************" << std::endl;
-    std::cout << "[ BumpHunter ]: Performing a signal+background fit." << std::endl;
-    std::cout << "***************************************************" << std::endl;
-    std::cout << "***************************************************" << std::endl;
-    
-    TF1* full{nullptr};  
-    if (poly_order_ == 3) { 
-        
-        ExpPol3FullFunction full_func(mass_hypothesis, window_end_ - window_start_); 
-        full = new TF1("full", full_func, -1, 1, 7);
-    
-        full->SetParameters(4,0,0,0,0,0,0);
-        full->SetParNames("pol0","pol1","pol2","pol3","signal norm","mean","sigma");
-        full->FixParameter(5,0.0); 
-        full->FixParameter(6, mass_resolution_); 
-  
-    } else { 
-  
-        ExpPol5FullFunction full_func(mass_hypothesis, window_end_ - window_start_); 
-        full = new TF1("full", full_func, -1, 1, 9);
-    
-        full->SetParameters(4,0,0,0,0,0,0,0,0);
-        full->SetParNames("pol0","pol1","pol2","pol3","pol4","pol5","signal norm","mean","sigma");
-        full->FixParameter(7,0.0); 
-        full->FixParameter(8, mass_resolution_); 
-
-    }    
-       
-    TFitResultPtr full_result = histogram->Fit("full", "LES+", "", window_start_, window_end_);
-    fit_result->setCompFitResult(full_result); 
-    //full_result->Print();
-
-    //if (!batch) { 
-        //printer->print(histogram, window_start_, window_end_, "test_print.pdf");
-    //}
-
-    this->calculatePValue(fit_result);
-    
-    // This code doesn't work. Why? Needs to be fixed.
-    // this->getUpperLimit(histogram, fit_result);
-    
-    // Persist the mass hypothesis used for this fit
-    fit_result->setMass(mass_hypothesis_); 
-    
-    // Persist the mass after correcting for the mass scale
-    fit_result->setCorrectedMass(corr_mass_); 
-
-    // Set the window size 
-    fit_result->setWindowSize(window_size_);
-
-    // Set the total number of events within the window
-    fit_result->setIntegral(integral_);
-
-    return fit_result; 
+HpsFitResult* BumpHunter::performSearch(TH1 *histogram, double mass_hypothesis, bool skip_bkg_fit = false) {
+	// Calculate all of the fit parameters e.g. window size, mass hypothesis
+	this->initialize(histogram, mass_hypothesis);
+	
+	// Instantiate a new fit result object to store all of the results.
+	HpsFitResult *fit_result = new HpsFitResult();
+	fit_result->setPolyOrder(poly_order_);
+	
+	// If not fitting toys, start by performing a background only fit.
+	if(!skip_bkg_fit) {
+		// Start by performing a background only fit.  The results from this fit 
+		// are used to get an intial estimate of the background parameters.  
+		std::cout << "*************************************************" << std::endl;
+		std::cout << "*************************************************" << std::endl;
+		std::cout << "[ BumpHunter ]: Performing a background only fit." << std::endl;
+		std::cout << "*************************************************" << std::endl;
+		std::cout << "*************************************************" << std::endl;
+		
+		//
+		TF1 *bkg{nullptr};
+		if(poly_order_ == 3) {
+			//
+			ExpPol3BkgFunction bkg_func(mass_hypothesis, window_end_ - window_start_); 
+			bkg = new TF1("bkg", bkg_func, -1, 1, 4);
+			
+			//
+			bkg->SetParameters(4, 0, 0, 0);
+			bkg->SetParNames("pol0", "pol1", "pol2", "pol3");
+		} else { 
+			//
+			ExpPol5BkgFunction bkg_func(mass_hypothesis, window_end_ - window_start_);
+			bkg = new TF1("bkg", bkg_func, -1, 1, 6);
+			
+			//
+			bkg->SetParameters(4, 0, 0, 0, 0, 0);
+			bkg->SetParNames("pol0", "pol1", "pol2", "pol3", "pol4", "pol5");
+		}
+		
+		std::cout << "Starting fit..." << std::endl;
+		TFitResultPtr result = histogram->Fit("bkg", "LES+", "", window_start_, window_end_);
+		std::cout << "End of fit..." << std::endl;
+		fit_result->setBkgFitResult(result);
+		//result->Print();
+	}
+	
+	std::cout << "End background fit." << std::endl;
+	
+	std::cout << "***************************************************" << std::endl;
+	std::cout << "***************************************************" << std::endl;
+	std::cout << "[ BumpHunter ]: Performing a signal+background fit." << std::endl;
+	std::cout << "***************************************************" << std::endl;
+	std::cout << "***************************************************" << std::endl;
+	
+	TF1 *full{nullptr};
+	if (poly_order_ == 3) {
+		ExpPol3FullFunction full_func(mass_hypothesis, window_end_ - window_start_);
+		full = new TF1("full", full_func, -1, 1, 7);
+		
+		full->SetParameters(4, 0, 0, 0, 0, 0, 0);
+		full->SetParNames("pol0", "pol1", "pol2", "pol3", "signal norm", "mean", "sigma");
+		full->FixParameter(5, 0.0);
+		full->FixParameter(6, mass_resolution_);
+	} else {
+		ExpPol5FullFunction full_func(mass_hypothesis, window_end_ - window_start_);
+		full = new TF1("full", full_func, -1, 1, 9);
+		
+		full->SetParameters(4, 0, 0, 0, 0, 0, 0, 0, 0);
+		full->SetParNames("pol0", "pol1", "pol2", "pol3", "pol4", "pol5", "signal norm", "mean", "sigma");
+		full->FixParameter(7, 0.0);
+		full->FixParameter(8, mass_resolution_);
+	}
+	
+	TFitResultPtr full_result = histogram->Fit("full", "LES+", "", window_start_, window_end_);
+	fit_result->setCompFitResult(full_result);
+	//full_result->Print();
+	
+	//if (!batch) { 
+		//printer->print(histogram, window_start_, window_end_, "test_print.pdf");
+	//}
+	
+	this->calculatePValue(fit_result);
+	
+	// This code doesn't work. Why? Needs to be fixed.
+	// this->getUpperLimit(histogram, fit_result);
+	
+	// Persist the mass hypothesis used for this fit
+	fit_result->setMass(mass_hypothesis_);
+	
+	// Persist the mass after correcting for the mass scale
+	fit_result->setCorrectedMass(corr_mass_);
+	
+	// Set the window size 
+	fit_result->setWindowSize(window_size_);
+	
+	// Set the total number of events within the window
+	fit_result->setIntegral(integral_);
+	
+	return fit_result; 
 }
 
 void BumpHunter::calculatePValue(HpsFitResult* result) {
@@ -384,104 +377,4 @@ double BumpHunter::correctMass(double mass) {
     double cmass = mass - mass*offset; 
     this->printDebug("Corrected Mass: " + std::to_string(cmass)); 
     return cmass;
-}
-
-/**
- * BkgFunction
- */
-
-//
-// TODO: Move the classes externally
-//
-
-ExpPol3BkgFunction::ExpPol3BkgFunction(double mass_hypothesis, double window_size)
-    : mass_hypothesis_(mass_hypothesis), 
-      window_size_(window_size) { 
-}
-
-double ExpPol3BkgFunction::operator() (double* x, double* par) { 
-    
-    double xp = (x[0] - mass_hypothesis_)/(window_size_*2.0); 
-  
-    // Chebyshevs between given limits
-    double t0 = par[0];
-    double t1 = par[1]*xp;
-    double t2 = par[2]*(2*xp*xp - 1);
-    double t3 = par[3]*(4*xp*xp*xp - 3*xp);
-  
-    double pol = t0+t1+t2+t3;
-
-    return TMath::Power(10,pol);
-}
-
-ExpPol5BkgFunction::ExpPol5BkgFunction(double mass_hypothesis, double window_size)
-    : mass_hypothesis_(mass_hypothesis), 
-      window_size_(window_size) { 
-}
-
-double ExpPol5BkgFunction::operator() (double* x, double* par) { 
-    
-    double xp = (x[0] - mass_hypothesis_)/(window_size_*2.0); 
-  
-    // Chebyshevs between given limits
-    double t0 = par[0];
-    double t1 = par[1]*xp;
-    double t2 = par[2]*(2*xp*xp - 1);
-    double t3 = par[3]*(4*xp*xp*xp - 3*xp);
-    double t4 = par[4]*(8*xp*xp*xp*xp - 8*xp*xp + 1);
-    double t5 = par[5]*(16*xp*xp*xp*xp*xp - 20*xp*xp*xp + 5*xp);
-  
-    double pol = t0+t1+t2+t3+t4+t5;
-
-    return TMath::Power(10,pol);
-}
-
-ExpPol3FullFunction::ExpPol3FullFunction(double mass_hypothesis, double window_size)
-    : mass_hypothesis_(mass_hypothesis), 
-      window_size_(window_size) { 
-}
-
-
-double ExpPol3FullFunction::operator() (double* x, double* par) { 
-    
-    double xp = (x[0] - mass_hypothesis_)/(window_size_*2.0); 
-  
-    // Chebyshevs between given limits
-    double t0 = par[0];
-    double t1 = par[1]*xp;
-    double t2 = par[2]*(2*xp*xp - 1);
-    double t3 = par[3]*(4*xp*xp*xp - 3*xp);
-  
-    double pol = t0+t1+t2+t3;
-
-    double gauss = (1.0)/(sqrt(2.0*TMath::Pi()*pow(par[6],2))) *
-        TMath::Exp( - pow((xp-par[5]),2)/(2.0*pow(par[6],2)) );
-  
-    return TMath::Power(10,pol)+0.0001*par[4]*gauss;
-}
-
-ExpPol5FullFunction::ExpPol5FullFunction(double mass_hypothesis, double window_size)
-    : mass_hypothesis_(mass_hypothesis), 
-      window_size_(window_size) { 
-}
-
-
-double ExpPol5FullFunction::operator() (double* x, double* par) { 
-    
-    double xp = (x[0] - mass_hypothesis_)/(window_size_*2.0); 
-  
-    // Chebyshevs between given limits
-    double t0 = par[0];
-    double t1 = par[1]*xp;
-    double t2 = par[2]*(2*xp*xp - 1);
-    double t3 = par[3]*(4*xp*xp*xp - 3*xp);
-    double t4 = par[4]*(8*xp*xp*xp*xp - 8*xp*xp + 1);
-    double t5 = par[5]*(16*xp*xp*xp*xp*xp - 20*xp*xp*xp + 5*xp);
-  
-    double pol = t0+t1+t2+t3+t4+t5;
-
-    double gauss = (1.0)/(sqrt(2.0*TMath::Pi()*pow(par[8],2))) *
-        TMath::Exp( - pow((xp-par[7]),2)/(2.0*pow(par[8],2)) );
-  
-    return TMath::Power(10,pol)+0.0001*par[6]*gauss;
 }

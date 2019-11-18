@@ -38,6 +38,10 @@
 //---//
 #include <HpsFitResult.h>
 #include <FitPrinter.h>
+#include <ExpPol3BkgFunction.h>
+#include <ExpPol5BkgFunction.h>
+#include <ExpPol3FullFunction.h>
+#include <ExpPol5FullFunction.h>
 
 class BumpHunter {
 
@@ -200,85 +204,6 @@ class BumpHunter {
         double mass_hypothesis_{0}; 
 
         double mass_resolution_{0};  
-};
-
-//
-// TODO: Move the classes externally 
-//
-
-class ExpPol3BkgFunction { 
-    
-    public: 
-
-        /** Constructor */
-        ExpPol3BkgFunction(double mass_hypothesis, double window_size); 
-
-        double operator() (double* x, double* par); 
-
-    private: 
-
-        /** Mass hypothesis */
-        double mass_hypothesis_{0}; 
-
-        /** Size of the search window. */
-        double window_size_{0};
-
-         
-};
-
-
-class ExpPol5BkgFunction { 
-    
-    public: 
-
-        /** Constructor */
-        ExpPol5BkgFunction(double mass_hypothesis, double window_size); 
-
-        double operator() (double* x, double* par); 
-
-    private: 
-
-        /** Mass hypothesis */
-        double mass_hypothesis_{0}; 
-
-        /** Size of the search window. */
-        double window_size_{0};
-
-         
-};
-
-
-class ExpPol5FullFunction { 
-    
-    public: 
-
-        /** Constructor */
-        ExpPol5FullFunction(double mass_hypothesis, double window_size); 
-
-        double operator() (double* x, double* par); 
-
-    private: 
-
-        double mass_hypothesis_{0}; 
-
-        double window_size_{0}; 
-};
-
-
-class ExpPol3FullFunction { 
-    
-    public: 
-
-        /** Constructor */
-        ExpPol3FullFunction(double mass_hypothesis, double window_size); 
-
-        double operator() (double* x, double* par); 
-
-    private: 
-
-        double mass_hypothesis_{0}; 
-
-        double window_size_{0}; 
 };
 
 #endif // __BUMP_HUNTER_H__
