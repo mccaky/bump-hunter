@@ -1,4 +1,3 @@
-
 find_library(ROO_FIT RooFit $ENV{ROOTSYS}/lib)
 find_library(ROO_FIT_CORE RooFitCore $ENV{ROOTSYS}/lib)
 find_library(ROOT_GPAD_LIB Gpad $ENV{ROOTSYS}/lib)
@@ -19,6 +18,10 @@ target_link_libraries(BumpHunter
     ${ROOT_MATH_LIB}
     HpsFitResult
     FitPrinter
+    ExpPol3BkgFunction
+    ExpPol5BkgFunction
+    ExpPol3FullFunction
+    ExpPol5FullFunction
 )
 
 add_executable(bump_hunter bump_hunter.cxx)
