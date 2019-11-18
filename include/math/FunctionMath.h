@@ -11,6 +11,9 @@ class FunctionMath {
 		
 		/** Defines a Gaussian function for signal-fitting. */
 		static double Gaussian(double x, double amplitude, double mean, double stddev);
+		
+		/** Defines a crystal ball function for signal-fitting. */
+		static double CrystalBall(double x, double amplitude, double mean, double stddev, double alpha, double n);
 	
 	private:
 		/**
@@ -24,6 +27,16 @@ class FunctionMath {
 		 * the final exponentiation.
 		 */
 		static double Order5BackgroundFunctionBase(double x, double p0, double p1, double p2, double p3, double p4, double p5);
+		
+		/**
+		 * Calculates a portion of the crystal ball function.
+		 */
+		static double calcA(double n, double absAlpha);
+		
+		/**
+		 * Calculates a portion of the crystal ball function.
+		 */
+		static double calcB(double n, double absAlpha);
 };
 
 #endif
