@@ -18,7 +18,6 @@
 //----------//
 #include <TFile.h>
 #include <TH1.h>
-#include <RooFitResult.h>
 
 //-----------------//
 //   Bump Hunter   //

@@ -17,15 +17,6 @@
 #include <TAxis.h>
 #include <TColor.h>
 
-//------------//
-//   RooFit   //
-//------------//
-#include <RooAddPdf.h>
-#include <RooDataHist.h>
-#include <RooHist.h>
-#include <RooPlot.h>
-#include <RooRealVar.h>
-
 class FitPrinter { 
     
     public: 
@@ -44,11 +35,6 @@ class FitPrinter {
         /** ROOT canvas */   
         TCanvas* _canvas{new TCanvas{"canvas", "canvas", 900, 800}};
         
-        /** Pad used to draw fit. */
-        //TPad* _main_pad{new TPad{"main_pad", "main_pad", 0.0, 0.2, 1.0, 1.0}}; 
-        
-        /** Pad used to draw residuals. */
-        //TPad* _res_pad{new TPad{"main_pad", "main_pad", 0.0, 0.0, 1.0, 0.2}}; 
 
 };  // FitPrinter
 

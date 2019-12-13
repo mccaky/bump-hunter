@@ -10,12 +10,6 @@
 #include <TFitResult.h>
 #include <TFitResultPtr.h>
 
-//------------//
-//   RooFit   //
-//------------//
-#include <RooFitResult.h>
-#include <RooRealVar.h>
-
 class HpsFitResult { 
 
     public: 
