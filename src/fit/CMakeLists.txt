@@ -10,8 +10,10 @@ target_link_libraries(BumpHunter
     FitPrinter
 )
 
-add_executable(bump_hunter bump_hunter.cxx)
-target_link_libraries(bump_hunter
+install(TARGETS HpsFitResult BumpHunter DESTINATION ${CMAKE_INSTALL_PREFIX}/lib)
+
+add_executable(bump-hunter bump_hunter.cxx)
+target_link_libraries(bump-hunter
     ${ROOT_CORE_LIBRARY}
     ${ROOT_RIO_LIBRARY}
     ${ROOT_HIST_LIBRARY} 
@@ -21,3 +23,6 @@ target_link_libraries(bump_hunter
     FlatTupleMaker
     HpsFitResult
 )
+
+install(TARGETS bump-hunter DESTINATION ${CMAKE_INSTALL_PREFIX}/bin)
+

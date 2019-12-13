@@ -19,3 +19,5 @@ add_library(FitPrinter FitPrinter.cxx)
 target_link_libraries(FitPrinter
     ${ROOT_GPAD_LIBRARY}
 )
+
+install(TARGETS RootFileReader FlatTupleMaker FitPrinter DESTINATION ${CMAKE_INSTALL_PREFIX}/lib)
