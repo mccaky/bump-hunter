@@ -4,7 +4,7 @@
 #
 
 # Specify the minimum CMake version required
-cmake_minimum_required(VERSION 2.8 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.0 FATAL_ERROR)
 
 # Set the project name
 project(BUMP_HUNTER)
