@@ -6,6 +6,7 @@ add_library(BumpHunter BumpHunter.cxx)
 target_link_libraries(BumpHunter
     ${ROOT_GPAD_LIBRARY}
     ${ROOT_MATH_LIBRARY}
+    ${ROOT_TREE_LIBRARY} 
     HpsFitResult
     FitPrinter
 )
