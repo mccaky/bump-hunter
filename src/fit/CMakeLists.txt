@@ -1,5 +1,9 @@
+add_library(CrystalBall 
+    CrystalBall.cxx
+)
 
-add_library(HpsFitResult HpsFitResult.cxx
+add_library(HpsFitResult 
+    HpsFitResult.cxx
 )
 
 add_library(BumpHunter BumpHunter.cxx)
@@ -9,6 +13,8 @@ target_link_libraries(BumpHunter
     ${ROOT_TREE_LIBRARY} 
     HpsFitResult
     FitPrinter
+    ExpPol3FullFunction
+    ExpPol5FullFunction
 )
 
 install(TARGETS HpsFitResult BumpHunter DESTINATION ${CMAKE_INSTALL_PREFIX}/lib)

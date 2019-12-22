@@ -22,14 +22,20 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/modules")
 # Require the ROOT libraries.
 find_package(ROOT REQUIRED Core RIO Hist MathCore Physics Tree Gpad)
 
-# Add the ROOT headers to the build
+# Add the ROOT headers to the build.
 include_directories(${ROOT_INCLUDE_DIRS})
+
+# Add math headers to the build
+include_directories(include/math)
 
 # Add fit headers to the build
 include_directories(include/fit)
 
 # Add utils headers to the build
 include_directories(include/utils)
+
+# Add the math source to the build
+add_subdirectory(src/math)
 
 # Add the utils source to the build
 add_subdirectory(src/utils)
@@ -38,4 +44,3 @@ add_subdirectory(src/utils)
 add_subdirectory(src/fit)
 
 message(STATUS "Files will be installed to ${CMAKE_INSTALL_PREFIX}")
-

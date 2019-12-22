@@ -38,6 +38,8 @@
 //---//
 #include <HpsFitResult.h>
 #include <FitPrinter.h>
+#include <ExpPol3FullFunction.h>
+#include <ExpPol5FullFunction.h>
 
 class BumpHunter {
 
@@ -51,7 +53,7 @@ class BumpHunter {
         };
 
         /** Default Constructor */
-        BumpHunter(BkgModel model, int poly_order, int res_factor);
+        BumpHunter(BkgModel model, FitFunction::FitModel m_fit_model, int poly_order, int res_factor);
 
         /** Destructor */
         ~BumpHunter();
@@ -117,7 +119,8 @@ class BumpHunter {
             //return -6.2*mass*mass*mass + 0.91*mass*mass - 0.00297*mass + 0.000579; 
             //return 0.0389938364847*mass - 0.0000713783511061; // ideal
             //return 0.0501460737193*mass - 0.0000917925595224; // scaled to moller mass from data
-            return 0.0532190838657*mass - 0.0000922283032152; // scaled to moller mass + sys
+            //return 0.0532190838657*mass - 0.0000922283032152; // scaled to moller mass + sys
+            return 0.000955 - 0.004198 * mass + 0.2367 * mass * mass - 0.7009 * mass * mass * mass;
         };
 
         /**
@@ -179,7 +182,10 @@ class BumpHunter {
 
         /** Polynomial order used to model the background. */
         int poly_order_{0};
-
+		
+		/** The type of function to use when modelling the signal. */
+		FitFunction::FitModel fit_model{FitFunction::FitModel::GAUSSIAN};
+		
         /** 
          * Flag denoting if application should run in batch mode.  If set to 
          * true, plots aren't generated and fit results aren't logged.
@@ -199,85 +205,6 @@ class BumpHunter {
         double mass_hypothesis_{0}; 
 
         double mass_resolution_{0};  
-};
-
-//
-// TODO: Move the classes externally 
-//
-
-class ExpPol3BkgFunction { 
-    
-    public: 
-
-        /** Constructor */
-        ExpPol3BkgFunction(double mass_hypothesis, double window_size); 
-
-        double operator() (double* x, double* par); 
-
-    private: 
-
-        /** Mass hypothesis */
-        double mass_hypothesis_{0}; 
-
-        /** Size of the search window. */
-        double window_size_{0};
-
-         
-};
-
-
-class ExpPol5BkgFunction { 
-    
-    public: 
-
-        /** Constructor */
-        ExpPol5BkgFunction(double mass_hypothesis, double window_size); 
-
-        double operator() (double* x, double* par); 
-
-    private: 
-
-        /** Mass hypothesis */
-        double mass_hypothesis_{0}; 
-
-        /** Size of the search window. */
-        double window_size_{0};
-
-         
-};
-
-
-class ExpPol5FullFunction { 
-    
-    public: 
-
-        /** Constructor */
-        ExpPol5FullFunction(double mass_hypothesis, double window_size); 
-
-        double operator() (double* x, double* par); 
-
-    private: 
-
-        double mass_hypothesis_{0}; 
-
-        double window_size_{0}; 
-};
-
-
-class ExpPol3FullFunction { 
-    
-    public: 
-
-        /** Constructor */
-        ExpPol3FullFunction(double mass_hypothesis, double window_size); 
-
-        double operator() (double* x, double* par); 
-
-    private: 
-
-        double mass_hypothesis_{0}; 
-
-        double window_size_{0}; 
 };
 
 #endif // __BUMP_HUNTER_H__

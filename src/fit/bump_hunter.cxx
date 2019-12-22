@@ -34,7 +34,10 @@ int main(int argc, char **argv) {
     BumpHunter::BkgModel model{BumpHunter::BkgModel::EXP_POLY};
     //BumpHunter::BkgModel model{BumpHunter::BkgModel::POLY};
     //BumpHunter::BkgModel model{BumpHunter::BkgModel::EXP_POLY_X_POLY};
-
+	
+	// Function used to model the signal.
+	FitFunction::FitModel fit_model{FitFunction::FitModel::GAUSSIAN};
+	
     // Name of file containing the histogram that will be fit. 
     string file_path{""};
 
@@ -169,7 +172,7 @@ int main(int argc, char **argv) {
     TH1* histogram = (TH1*) file->Get(hist_name.c_str()); 
 
     // Create a new Bump Hunter instance and set the given properties.
-    BumpHunter* bump_hunter = new BumpHunter(model, poly_order, win_factor);
+    BumpHunter* bump_hunter = new BumpHunter(model, fit_model, poly_order, win_factor);
     if (log_fit) bump_hunter->writeResults(); 
     if (debug) bump_hunter->enableDebug();  
     if (batch) bump_hunter->runBatchMode(); 
