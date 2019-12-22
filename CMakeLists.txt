@@ -4,47 +4,43 @@
 #
 
 # Specify the minimum CMake version required
-cmake_minimum_required(VERSION 2.8 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.0 FATAL_ERROR)
 
 # Set the project name
-project(BUMP_HUNTER)
+project(bump-hunter LANGUAGES CXX)
 
-# Set the current version
-set(BUMP_HUNTER_VERSION_MAJOR 0)
-set(BUMP_HUNTER_VERSION_MINOR 1)
+# Set the CXX standard
+set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_EXTENSIONS OFF)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-# Set the output directories of the binaries, static and shared libraries
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${BUMP_HUNTER_BINARY_DIR}/bin")
-set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${BUMP_HUNTER_BINARY_DIR}/lib")
-set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${BUMP_HUNTER_BINARY_DIR}/lib")
-
-# Set additional compiler flags
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 
 # Set the path to additional CMake modules
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/modules")
 
 # Require the ROOT libraries.
-find_package(ROOT REQUIRED)
+find_package(ROOT REQUIRED Core RIO Hist MathCore Physics Tree Gpad)
 
 # Add the ROOT headers to the build.
 include_directories(${ROOT_INCLUDE_DIRS})
 
-# Add the fit function headers to the build.
-include_directories("${BUMP_HUNTER_SOURCE_DIR}/include/math")
+# Add math headers to the build
+include_directories(include/math)
 
-# Add fit headers to the build.
-include_directories("${BUMP_HUNTER_SOURCE_DIR}/include/fit")
+# Add fit headers to the build
+include_directories(include/fit)
 
-# Add utils headers to the build.
-include_directories("${BUMP_HUNTER_SOURCE_DIR}/include/utils")
+# Add utils headers to the build
+include_directories(include/utils)
 
-# Add the fit function  source to the build.
-add_subdirectory("${BUMP_HUNTER_SOURCE_DIR}/src/math")
+# Add the math source to the build
+add_subdirectory(src/math)
 
-# Add the utils source to the build.
-add_subdirectory("${BUMP_HUNTER_SOURCE_DIR}/src/utils")
+# Add the utils source to the build
+add_subdirectory(src/utils)
 
-# Add the fit source to the build.
-add_subdirectory("${BUMP_HUNTER_SOURCE_DIR}/src/fit")
+# Add the fit source to the build
+add_subdirectory(src/fit)
 
+message(STATUS "Files will be installed to ${CMAKE_INSTALL_PREFIX}")
